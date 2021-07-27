@@ -1,0 +1,18 @@
+{
+  "name": "haah.home.rbn.is",
+  "version": "0.1.0",
+  "description": "HAAH config for my home",
+  "scripts": {
+    "start": "ts-node index.ts"
+  },
+  "license": "AGPL-3.0-only",
+  "dependencies": {
+    "@types/node": "^16.4.3",
+    "@types/react": "^17.0.15",
+    "antd": "^4.16.8",
+    "haah": "file:../haah",
+    "react": "^17.0.2",
+    "ts-node": "^10.1.0",
+    "typescript": "^4.3.5"
+  }
+}
