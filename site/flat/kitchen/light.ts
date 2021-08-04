@@ -12,9 +12,7 @@ mqttSensor('zigbee2mqtt/motion/kitchen', (payload) => {
       });
     }
 
-    if (occupancyTimeout) {
-      clearTimeout(occupancyTimeout);
-    }
+    if (occupancyTimeout) clearTimeout(occupancyTimeout);
     occupancyTimeout = setTimeout(() => {
       updateState(kitchen, (state) => {
         state.occupied = false;
@@ -23,35 +21,20 @@ mqttSensor('zigbee2mqtt/motion/kitchen', (payload) => {
 });
 
 let overwriteTimeout: NodeJS.Timeout;
-mqttSensor('zigbee2mqtt/switch/kitchen_door', (payload) => {
-  if (payload.action === 'on')  {
+mqttSensor('zigbee2mqtt/switch/kitchen_door_wall', (payload) => {
+  if (payload.action === 'left_press') {
+    var overwriteTime = taints.none;
     updateState(kitchen, (state) => {
-      state.overwrite = taints.lightOn;
+      overwriteTime = state.overwrite === taints.lightOn ? 5: 60 * 60;
+      state.overwrite = state.overwrite === taints.lightOn ? taints.lightOff : taints.lightOn;
     });
 
-    if (overwriteTimeout) {
-      clearTimeout(overwriteTimeout);
-    }
+    if (overwriteTimeout) clearTimeout(overwriteTimeout);
     overwriteTimeout = setTimeout(() => {
       updateState(kitchen, (state) => {
         state.overwrite = taints.none;
       });
-    }, 1000 * 60 * 60);
-  }
-
-  if (payload.action === 'off') {
-    updateState(kitchen, (state) => {
-      state.overwrite = taints.lightOff;
-    });
-
-    if (overwriteTimeout) {
-      clearTimeout(overwriteTimeout);
-    }
-    overwriteTimeout = setTimeout(() => {
-      updateState(kitchen, (state) => {
-        state.overwrite = taints.none;
-      });
-    }, 1000 * 5);
+    }, 1000 * overwriteTime);
   }
 });
 

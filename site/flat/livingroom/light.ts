@@ -3,6 +3,14 @@ import { environment } from '../../environment';
 
 import { livingroom } from ".";
 
+mqttSensor('zigbee2mqtt/switch/livingroom_door_wall', (payload) => {
+  if (payload.action === 'left_press') {
+    updateState(livingroom, (state) => {
+      state.lightOn = !state.lightOn;
+    });
+  }
+});
+
 mqttSensor('zigbee2mqtt/switch/livingroom_door', (payload) => {
   if (payload.action === 'toggle') {
     updateState(livingroom, (state) => {
