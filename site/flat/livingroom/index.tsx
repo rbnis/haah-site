@@ -40,7 +40,7 @@ webuiWidget('Living Room', () => {
       <Slider
         value={livingroom.brightness}
         min={0}
-        step={0.01}
+        step={0.05}
         max={1.0}
         onChange={(brightness: number) =>
           updateState(livingroom, (state) => {
