@@ -10,7 +10,10 @@ mqttSensor('zigbee2mqtt/switch/kitchen_door_wall', (payload) => {
     updateState(kitchen, (state) => {
       overwriteTime = state.overwrite === taints.lightOn ? 5: 60 * 60;
       state.occupied = state.overwrite === taints.lightOn ? false : state.occupied;
-      state.overwrite = state.overwrite === taints.lightOn || state.occupied ? taints.lightOff : taints.lightOn;
+      state.overwrite = state.overwrite === taints.lightOn
+        || (state.occupied && state.overwrite === taints.none)
+          ? taints.lightOff
+          : taints.lightOn;
     });
 
     if (overwriteTimeout) clearTimeout(overwriteTimeout);
