@@ -1,43 +1,8 @@
-import { mqttActuator, mqttSensor, updateState } from 'haah';
-
-import { taints } from '../../../util/enums';
-import { kitchen } from ".";
+import { mqttActuator } from 'haah';
 import { environment } from '../../environment';
+import { taints } from '../../../util/enums';
 
-let occupancyTimeout: NodeJS.Timeout;
-mqttSensor('zigbee2mqtt/motion/kitchen', (payload) => {
-  if (payload.occupancy === true) {
-    updateState(kitchen, (state) => {
-      state.occupied = true;
-      });
-    }
-
-    if (occupancyTimeout) clearTimeout(occupancyTimeout);
-    occupancyTimeout = setTimeout(() => {
-      updateState(kitchen, (state) => {
-        state.occupied = false;
-      });
-    }, 1000 * 60 * 5);
-});
-
-let overwriteTimeout: NodeJS.Timeout;
-mqttSensor('zigbee2mqtt/switch/kitchen_door_wall', (payload) => {
-  if (payload.action === 'left_press') {
-    var overwriteTime = taints.none;
-    updateState(kitchen, (state) => {
-      overwriteTime = state.overwrite === taints.lightOn ? 5: 60 * 60;
-      state.occupied = state.overwrite === taints.lightOn ? false : state.occupied;
-      state.overwrite = state.overwrite === taints.lightOn || state.occupied ? taints.lightOff : taints.lightOn;
-    });
-
-    if (overwriteTimeout) clearTimeout(overwriteTimeout);
-    overwriteTimeout = setTimeout(() => {
-      updateState(kitchen, (state) => {
-        state.overwrite = taints.none;
-      });
-    }, 1000 * overwriteTime);
-  }
-});
+import { kitchen } from ".";
 
 mqttActuator('zigbee2mqtt/light/kitchen_ceiling/set', () => {
   if (kitchen.overwrite === taints.lightOff) {
