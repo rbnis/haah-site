@@ -6,11 +6,11 @@ import { hallway } from ".";
 
 function hallwayLight() {
   return () => {
-    if (hallway.overwrite === taints.lightOff) {
+    if (hallway.overwrites.ceiling === taints.lightOff) {
       return { state: 'off', transition: 0.3 }
     }
 
-    if (hallway.overwrite === taints.lightOn) {
+    if (hallway.overwrites.ceiling === taints.lightOn) {
       return {
         state: 'on',
         transition: 0.3,

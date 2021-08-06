@@ -5,11 +5,11 @@ import { taints } from '../../../util/enums';
 import { kitchen } from ".";
 
 mqttActuator('zigbee2mqtt/light/kitchen_ceiling/set', () => {
-  if (kitchen.overwrite === taints.lightOff) {
+  if (kitchen.overwrites.ceiling === taints.lightOff) {
     return { state: 'off', transition: 0.3 }
   }
 
-  if (kitchen.overwrite === taints.lightOn) {
+  if (kitchen.overwrites.ceiling === taints.lightOn) {
     return {
       state: 'on',
       transition: 0.3,

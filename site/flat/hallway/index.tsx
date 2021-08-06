@@ -7,7 +7,9 @@ import { environment } from '../../environment';
 
 export const hallway = state('hallway', {
   occupied: false,
-  overwrite: taints.none,
+  overwrites: {
+    ceiling: taints.none,
+  },
 });
 
 let overwriteTimeout: NodeJS.Timeout;
@@ -16,10 +18,10 @@ webuiWidget('Hallway', () => {
     <>
       <LabeledSwitch
         label={"Lights"}
-        checked={(hallway.overwrite == taints.lightOn || (hallway.occupied && !environment.daylight && hallway.overwrite !== taints.lightOff))}
+        checked={(hallway.overwrites.ceiling == taints.lightOn || (hallway.occupied && !environment.daylight && hallway.overwrites.ceiling !== taints.lightOff))}
         onChange={(checked) => {
           updateState(hallway, (state) => {
-            state.overwrite = checked ? taints.lightOn : taints.lightOff;
+            state.overwrites.ceiling = checked ? taints.lightOn : taints.lightOff;
           });
 
           if (overwriteTimeout) {
@@ -27,7 +29,7 @@ webuiWidget('Hallway', () => {
           }
           overwriteTimeout = setTimeout(() => {
             updateState(hallway, (state) => {
-              state.overwrite = taints.none;
+              state.overwrites.ceiling = taints.none;
             });
           }, 1000 * 60 * (checked ? 30 : 3));
         }}

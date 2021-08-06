@@ -8,10 +8,10 @@ mqttSensor('zigbee2mqtt/switch/kitchen_door_wall', (payload) => {
   if (payload.action === 'left_press') {
     var overwriteTime = taints.none;
     updateState(kitchen, (state) => {
-      overwriteTime = state.overwrite === taints.lightOn ? 5: 60 * 60;
-      state.occupied = state.overwrite === taints.lightOn ? false : state.occupied;
-      state.overwrite = state.overwrite === taints.lightOn
-        || (state.occupied && state.overwrite === taints.none)
+      overwriteTime = state.overwrites.ceiling === taints.lightOn ? 5: 60 * 60;
+      state.occupied = state.overwrites.ceiling === taints.lightOn ? false : state.occupied;
+      state.overwrites.ceiling = state.overwrites.ceiling === taints.lightOn
+        || (state.occupied && state.overwrites.ceiling === taints.none)
           ? taints.lightOff
           : taints.lightOn;
     });
@@ -19,7 +19,7 @@ mqttSensor('zigbee2mqtt/switch/kitchen_door_wall', (payload) => {
     if (overwriteTimeout) clearTimeout(overwriteTimeout);
     overwriteTimeout = setTimeout(() => {
       updateState(kitchen, (state) => {
-        state.overwrite = taints.none;
+        state.overwrites.ceiling = taints.none;
       });
     }, 1000 * overwriteTime);
   }
