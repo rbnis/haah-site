@@ -16,7 +16,7 @@ webuiWidget('Hallway', () => {
     <>
       <LabeledSwitch
         label={"Lights"}
-        checked={(hallway.overwrite == taints.lightOn || (hallway.occupied && !environment.daylight))}
+        checked={(hallway.overwrite == taints.lightOn || (hallway.occupied && !environment.daylight && hallway.overwrite !== taints.lightOff))}
         onChange={(checked) => {
           updateState(hallway, (state) => {
             state.overwrite = checked ? taints.lightOn : taints.lightOff;
@@ -29,7 +29,7 @@ webuiWidget('Hallway', () => {
             updateState(hallway, (state) => {
               state.overwrite = taints.none;
             });
-          }, 1000 * (checked ? 60 * 30 : 5));
+          }, 1000 * 60 * (checked ? 30 : 3));
         }}
       />
     </>
