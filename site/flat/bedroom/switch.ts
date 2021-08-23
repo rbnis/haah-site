@@ -22,15 +22,15 @@ mqttSensor('zigbee2mqtt/switch/bedroom_door_wall', (payload) => {
 function bedroomBedSwitch(payload: any) {
   if (payload.action === 'toggle') {
     updateState(bedroom, (state) => {
-      state.overwrites.readingLeft = (state.lightOn && state.overwrites.readingLeft === taints.lightOn)
-        || (!state.lightOn && state.overwrites.readingLeft === taints.lightOff)
-          ? taints.none
-          : state.overwrites.readingLeft;
-      state.overwrites.readingRight = (state.lightOn && state.overwrites.readingRight === taints.lightOn)
-        || (!state.lightOn && state.overwrites.readingRight === taints.lightOff)
-          ? taints.none
-          : state.overwrites.readingRight;
-      state.lightOn = !state.lightOn;
+      if ( state.lightOn ||
+           [state.overwrites.ceiling, state.overwrites.readingLeft, state.overwrites.readingRight].some(overwrite => overwrite === taints.lightOn) ) {
+          state.lightOn = false;
+          state.overwrites.ceiling = taints.none;
+          state.overwrites.readingLeft = taints.none;
+          state.overwrites.readingRight = taints.none;
+        } else {
+          state.lightOn = true;
+        }
     });
   }
 
