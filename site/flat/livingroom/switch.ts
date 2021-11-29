@@ -1,4 +1,5 @@
 import { mqttSensor, updateState } from 'haah';
+import { clamp } from '../../../util/helper';
 
 import { livingroom } from ".";
 
@@ -52,7 +53,23 @@ mqttSensor('zigbee2mqtt/switch/livingroom_remote', (payload) => {
   if (payload.action === 'on_press') {
     updateState(livingroom, (state) => {
       state.lightOn = true;
+      state.productive = false;
       state.brightness = 1.0;
+    });
+  }
+
+  if (payload.action === 'on_hold') {
+    updateState(livingroom, (state) => {
+      state.lightOn = true;
+      state.productive = true;
+      state.brightness = 1.0;
+    });
+  }
+
+  if (payload.action === 'off_hold') {
+    updateState(livingroom, (state) => {
+      state.lightOn = true;
+      state.brightness = 0.3;
       state.productive = false;
     });
   }
@@ -60,16 +77,14 @@ mqttSensor('zigbee2mqtt/switch/livingroom_remote', (payload) => {
   if (payload.action === 'up_press') {
     updateState(livingroom, (state) => {
       state.lightOn = true;
-      state.brightness = 1.0;
-      state.productive = true;
+      state.brightness = clamp(0, 1.0)(state.brightness + 0.1);
     });
   }
 
   if (payload.action === 'down_press') {
     updateState(livingroom, (state) => {
       state.lightOn = true;
-      state.brightness = 0.5;
-      state.productive = false;
+      state.brightness = clamp(0, 1.0)(state.brightness - 0.1);
     });
   }
 

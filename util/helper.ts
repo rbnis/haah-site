@@ -8,3 +8,7 @@ export function interpolate(value: number, state0: any, state1: any): any {
     ]),
   );
 }
+
+export function clamp(min: number, max: number) {
+  return (value: number) => Math.max(min, Math.min(value, max));
+}
