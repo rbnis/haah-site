@@ -15,7 +15,7 @@ mqttSensor('zigbee2mqtt/switch/livingroom_door', (payload) => {
   if (payload.action === 'toggle') {
     updateState(livingroom, (state) => {
       state.lightOn = !state.lightOn;
-      state.brightness = 1.0;
+      state.brightness = 0.8;
       state.productive = false;
     });
   }
@@ -23,7 +23,7 @@ mqttSensor('zigbee2mqtt/switch/livingroom_door', (payload) => {
   if (payload.action === 'arrow_left_click') {
     updateState(livingroom, (state) => {
       state.lightOn = true;
-      state.brightness = 1.0;
+      state.brightness = 0.8;
       state.productive = true;
     });
   }
@@ -38,13 +38,13 @@ mqttSensor('zigbee2mqtt/switch/livingroom_door', (payload) => {
 
   if (payload.action === 'brightness_up_click') {
     updateState(livingroom, (state) => {
-      state.brightness = state.brightness >= 1.0 ? 1.0 : state.brightness+0.1;
+      state.brightness = clamp(0.1, 1.0)(state.brightness + 0.1);
     });
   }
 
   if (payload.action === 'brightness_down_click') {
     updateState(livingroom, (state) => {
-      state.brightness = state.brightness <= 0.1 ? 0.1 : state.brightness-0.1;
+      state.brightness = clamp(0.1, 1.0)(state.brightness - 0.1);
     });
   }
 });
@@ -54,7 +54,7 @@ mqttSensor('zigbee2mqtt/switch/livingroom_remote', (payload) => {
     updateState(livingroom, (state) => {
       state.lightOn = true;
       state.productive = false;
-      state.brightness = 1.0;
+      state.brightness = 0.8;
     });
   }
 
@@ -62,11 +62,11 @@ mqttSensor('zigbee2mqtt/switch/livingroom_remote', (payload) => {
     updateState(livingroom, (state) => {
       state.lightOn = true;
       state.productive = true;
-      state.brightness = 1.0;
+      state.brightness = 0.8;
     });
   }
 
-  if (payload.action === 'off_hold') {
+  if (payload.action === 'down_hold') {
     updateState(livingroom, (state) => {
       state.lightOn = true;
       state.brightness = 0.3;
@@ -77,14 +77,14 @@ mqttSensor('zigbee2mqtt/switch/livingroom_remote', (payload) => {
   if (payload.action === 'up_press') {
     updateState(livingroom, (state) => {
       state.lightOn = true;
-      state.brightness = clamp(0, 1.0)(state.brightness + 0.1);
+      state.brightness = clamp(0.1, 1.0)(state.brightness + 0.1);
     });
   }
 
   if (payload.action === 'down_press') {
     updateState(livingroom, (state) => {
       state.lightOn = true;
-      state.brightness = clamp(0, 1.0)(state.brightness - 0.1);
+      state.brightness = clamp(0.1, 1.0)(state.brightness - 0.1);
     });
   }
 

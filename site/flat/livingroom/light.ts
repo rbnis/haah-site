@@ -12,7 +12,7 @@ function livingroomCeilingLight() {
     return {
       state: 'on',
       transition: 0.3,
-      brightness: 190 * livingroom.brightness,
+      brightness: 255 * livingroom.brightness,
     }
   }
 }
@@ -29,7 +29,7 @@ mqttActuator('zigbee2mqtt/light/livingroom_desk/set', () => {
   return {
     state: 'on',
     transition: 0.3,
-    brightness: (environment.daylight ? 180 : 130) * livingroom.brightness,
+    brightness: (environment.daylight ? 230 : 180) * livingroom.brightness,
     color: livingroom.productive
       ? { r: 255, g: 226, b: 162 }
       : { r: 104, g: 0,   b: 231 },
@@ -44,10 +44,7 @@ mqttActuator('zigbee2mqtt/light/livingroom_couch/set', () => {
   return {
     state: 'on',
     transition: 0.3,
-    brightness: livingroom.productive
-      ? (environment.daylight ? 100 : 80)
-      : (environment.daylight ? 220 : 170)
-      * livingroom.brightness,
+    brightness: livingroom.productive ? 150 : (environment.daylight ? 230 : 180) * livingroom.brightness,
     color: livingroom.productive
       ? { r: 255, g: 226, b: 162 }
       : { r: 104, g: 0,   b: 231 },
