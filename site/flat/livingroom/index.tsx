@@ -1,6 +1,5 @@
 import { state, updateState, webuiWidget } from 'haah';
-import { Slider } from 'antd';
-import { LabeledSwitch } from '../../../util/frontend';
+import { LabeledSwitch, LabeledSlider } from '../../../util/frontend';
 import React from 'react';
 
 import { windowState } from '../../../util/enums';
@@ -18,6 +17,19 @@ export const livingroom = state('livingroom', {
 });
 
 webuiWidget('Living Room', () => {
+  const temperatureMarks = {
+    10: '10°C',
+    21: '21°C',
+    30: '30°C'
+  };
+
+  const brightnessMarks = {
+    0: '0%',
+    0.5: '50%',
+    0.8: '80%',
+    1.0: '100%'
+  };
+
   return (
     <>
       <LabeledSwitch
@@ -38,22 +50,26 @@ webuiWidget('Living Room', () => {
           })
         }
       />
-      <Slider
+      <LabeledSlider
+        label={"Brightness"}
         value={livingroom.brightness}
         min={0}
         step={0.05}
         max={1.0}
+        marks={brightnessMarks}
         onChange={(brightness: number) =>
           updateState(livingroom, (state) => {
             state.brightness = brightness;
           })
         }
       />
-      <Slider
+      <LabeledSlider
+        label={"Temperature"}
         value={livingroom.temperatureTarget}
         min={10}
         step={0.5}
         max={30}
+        marks={temperatureMarks}
         onChange={(temperatureTarget: number) =>
           updateState(livingroom, (state) => {
             state.temperatureTarget = temperatureTarget;

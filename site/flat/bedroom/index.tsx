@@ -1,6 +1,5 @@
 import { state, updateState, webuiWidget } from 'haah';
-import { Slider } from 'antd';
-import { LabeledSwitch } from '../../../util/frontend';
+import { LabeledSwitch, LabeledSlider } from '../../../util/frontend';
 import React from 'react';
 
 import { taints, windowState } from '../../../util/enums';
@@ -21,6 +20,13 @@ export const bedroom = state('bedroom', {
 });
 
 webuiWidget('Bedroom', () => {
+  const brightnessMarks = {
+    0: '0%',
+    0.5: '50%',
+    0.8: '80%',
+    1.0: '100%'
+  };
+
   return (
     <>
       <LabeledSwitch
@@ -76,11 +82,13 @@ webuiWidget('Bedroom', () => {
           })
         }
       />
-      <Slider
+      <LabeledSlider
+        label={"Brightness"}
         value={bedroom.brightness}
         min={0}
         step={0.05}
         max={1.0}
+        marks={brightnessMarks}
         onChange={(brightness: number) =>
           updateState(bedroom, (state) => {
             state.brightness = brightness;
