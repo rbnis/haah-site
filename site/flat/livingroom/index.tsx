@@ -10,10 +10,11 @@ export const livingroom = state('livingroom', {
   brightness: 1.0,
   productive: false,
   window: windowState.open,
-  humidity : 0,
-  temperature: 0,
-  temperatureTarget: 21,
-  temperatureThermostat: 0,
+  humidity: 0.00,
+  pressure: 0.0,
+  temperature: 0.00,
+  temperatureTarget: 21.00,
+  temperatureThermostat: 0.00,
 });
 
 webuiWidget('Living Room', () => {
@@ -45,6 +46,17 @@ webuiWidget('Living Room', () => {
         onChange={(brightness: number) =>
           updateState(livingroom, (state) => {
             state.brightness = brightness;
+          })
+        }
+      />
+      <Slider
+        value={livingroom.temperatureTarget}
+        min={10}
+        step={0.5}
+        max={30}
+        onChange={(temperatureTarget: number) =>
+          updateState(livingroom, (state) => {
+            state.temperatureTarget = temperatureTarget;
           })
         }
       />
