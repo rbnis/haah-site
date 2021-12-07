@@ -6,7 +6,7 @@ import { windowState } from '../../../util/enums';
 
 export const livingroom = state('livingroom', {
   lightOn: false,
-  brightness: 1.0,
+  brightness: 0.8,
   productive: false,
   window: windowState.open,
   humidity: 0.00,
@@ -83,6 +83,10 @@ webuiWidget('Living Room', () => {
       <LabeledLabel
         label={"Humidity"}
         value={livingroom.humidity + " %"}
+      />
+      <LabeledLabel
+        label={"Balcony door"}
+        value={livingroom.window == windowState.closed ? "Closed" : "Open"}
       />
     </>
   );
