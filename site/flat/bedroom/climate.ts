@@ -36,10 +36,10 @@ mqttSensor('zigbee2mqtt/contact/bedroom_window_right', (payload) => {
 mqttActuator('zigbee2mqtt/climate/bedroom/set', () => {
   if (bedroom.window === windowState.closed && environment.daytime) {
     return {
-      current_heating_setpoint: bedroom.temperatureThermostat + (bedroom.temperatureTarget - bedroom.temperature),
+      occupied_heating_setpoint: bedroom.temperatureThermostat + (bedroom.temperatureTarget - bedroom.temperature),
     }
   }
   return {
-    current_heating_setpoint: 5,
+    occupied_heating_setpoint: 5,
   }
 });
