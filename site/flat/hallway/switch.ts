@@ -19,7 +19,23 @@ mqttSensor('zigbee2mqtt/switch/hallway_door_2', (payload) => {
   }
 });
 
+let overwriteTimeoutKitchen: NodeJS.Timeout;
 mqttSensor('zigbee2mqtt/switch/hallway_entry', (payload) => {
+  if (payload.action === 'on') {
+    updateState(hallway, (state) => {
+      state.overwrites.ceiling = taints.lightOn;
+    });
+
+    if (overwriteTimeout) {
+      clearTimeout(overwriteTimeout);
+    }
+    overwriteTimeout = setTimeout(() => {
+      updateState(hallway, (state) => {
+        state.overwrites.ceiling = taints.none;
+      });
+    }, 1000 * 60 * 30);
+  }
+
   if (payload.action === 'off') {
     updateState(bedroom, (state) => {
       state.lightOn = false;
@@ -35,10 +51,13 @@ mqttSensor('zigbee2mqtt/switch/hallway_entry', (payload) => {
     });
 
     if (overwriteTimeout) clearTimeout(overwriteTimeout);
+    if (overwriteTimeoutKitchen) clearTimeout(overwriteTimeoutKitchen);
     overwriteTimeout = setTimeout(() => {
       updateState(hallway, (state) => {
         state.overwrites.ceiling = taints.none;
       });
+    }, 1000 * 60 * 5);
+    overwriteTimeoutKitchen = setTimeout(() => {
       updateState(kitchen, (state) => {
         state.overwrites.ceiling = taints.none;
       });
