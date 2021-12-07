@@ -16,3 +16,11 @@ export function LabeledSlider<T>({label, ...rest}: {label: string} & SliderSingl
     </Form.Item>
   )
 }
+
+export function LabeledLabel<T>({label, value}: {label: string, value: string}) {
+  return (
+    <Form.Item label={label} labelCol={{ span: 18 }} wrapperCol={{ span: 6 }} labelAlign='left'>
+      <span style={{float: 'right'}} className="ant-form-text">{value}</span>
+    </Form.Item>
+  )
+}

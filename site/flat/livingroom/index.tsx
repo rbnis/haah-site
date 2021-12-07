@@ -1,5 +1,5 @@
 import { state, updateState, webuiWidget } from 'haah';
-import { LabeledSwitch, LabeledSlider } from '../../../util/frontend';
+import { LabeledSwitch, LabeledSlider, LabeledLabel } from '../../../util/frontend';
 import React from 'react';
 
 import { windowState } from '../../../util/enums';
@@ -24,7 +24,7 @@ webuiWidget('Living Room', () => {
   };
 
   const brightnessMarks = {
-    0: '0%',
+    0.05: '5%',
     0.5: '50%',
     0.8: '80%',
     1.0: '100%'
@@ -53,7 +53,7 @@ webuiWidget('Living Room', () => {
       <LabeledSlider
         label={"Brightness"}
         value={livingroom.brightness}
-        min={0}
+        min={0.05}
         step={0.05}
         max={1.0}
         marks={brightnessMarks}
@@ -75,6 +75,14 @@ webuiWidget('Living Room', () => {
             state.temperatureTarget = temperatureTarget;
           })
         }
+      />
+      <LabeledLabel
+        label={"Temperature"}
+        value={livingroom.temperature + " °C"}
+      />
+      <LabeledLabel
+        label={"Humidity"}
+        value={livingroom.humidity + " %"}
       />
     </>
   );

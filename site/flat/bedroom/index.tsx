@@ -21,7 +21,7 @@ export const bedroom = state('bedroom', {
 
 webuiWidget('Bedroom', () => {
   const brightnessMarks = {
-    0: '0%',
+    0.05: '5%',
     0.5: '50%',
     0.8: '80%',
     1.0: '100%'
@@ -85,7 +85,7 @@ webuiWidget('Bedroom', () => {
       <LabeledSlider
         label={"Brightness"}
         value={bedroom.brightness}
-        min={0}
+        min={0.05}
         step={0.05}
         max={1.0}
         marks={brightnessMarks}
