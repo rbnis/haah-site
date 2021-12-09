@@ -3,9 +3,10 @@ import { lightState, occupancyState, windowState } from '../util/enums';
 
 export const settings = {
   colors: {
-    accent: { r: 104, g: 0,   b: 231 },
+    accent:    { r: 250, g: 120, b: 64  },
     productive: { r: 255, g: 226, b: 162 },
-    uhlala: { r: 255, g: 0, b: 0 },
+    uhlala:     { r: 177, g: 21,  b: 41  },
+    rc3:        { r: 104, g: 0,   b: 231 },
   },
   colortemperature: {
     default: 350,
