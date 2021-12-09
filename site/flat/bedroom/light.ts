@@ -4,14 +4,14 @@ import { lightState } from '../../../util/enums';
 
 function bedroomCeilingLight() {
   return () => {
-    if (site.flat.bedroom.lights.ceiling.state === lightState.lightOff) {
+    if (site.flat.bedroom.lights.ceiling.state === lightState.off) {
       return {
         state: 'off',
         transition: settings.transition.short,
       }
     }
 
-    if (site.flat.bedroom.lights.ceiling.state === lightState.lightOn) {
+    if (site.flat.bedroom.lights.ceiling.state === lightState.on) {
       return {
         state: 'on',
         transition: settings.transition.short,
@@ -49,14 +49,14 @@ mqttActuator('zigbee2mqtt/light/bedroom_ceiling_1/set', bedroomCeilingLight());
 mqttActuator('zigbee2mqtt/light/bedroom_ceiling_2/set', bedroomCeilingLight());
 
 mqttActuator('zigbee2mqtt/light/bedroom_bed_left/set', () => {
-  if (site.flat.bedroom.lights.readingLeft.state === lightState.lightOff) {
+  if (site.flat.bedroom.lights.readingLeft.state === lightState.off) {
     return {
       state: 'off',
       transition: settings.transition.short,
     }
   }
 
-  if (site.flat.bedroom.lights.readingLeft.state === lightState.lightOn) {
+  if (site.flat.bedroom.lights.readingLeft.state === lightState.on) {
     return {
       state: 'on',
       transition: settings.transition.short,
@@ -81,14 +81,14 @@ mqttActuator('zigbee2mqtt/light/bedroom_bed_left/set', () => {
 });
 
 mqttActuator('zigbee2mqtt/light/bedroom_bed_right/set', () => {
-  if (site.flat.bedroom.lights.readingRight.state === lightState.lightOff) {
+  if (site.flat.bedroom.lights.readingRight.state === lightState.off) {
     return {
       state: 'off',
       transition: settings.transition.short,
     }
   }
 
-  if (site.flat.bedroom.lights.readingRight.state === lightState.lightOn) {
+  if (site.flat.bedroom.lights.readingRight.state === lightState.on) {
     return {
       state: 'on',
       transition: settings.transition.short,

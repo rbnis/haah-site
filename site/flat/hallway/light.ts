@@ -16,14 +16,14 @@ const localSettings = {
 
 function hallwayCeilingLight() {
   return () => {
-    if (site.flat.hallway.lights.ceiling.state === lightState.lightOff) {
+    if (site.flat.hallway.lights.ceiling.state === lightState.off) {
       return {
         state: 'off',
         transition: settings.transition.short,
       }
     }
 
-    if (site.flat.hallway.lights.ceiling.state === lightState.lightOn) {
+    if (site.flat.hallway.lights.ceiling.state === lightState.on) {
       return {
         state: 'on',
         transition: settings.transition.short,
@@ -61,12 +61,12 @@ mqttActuator('zigbee2mqtt/light/hallway_ceiling_3/set', hallwayCeilingLight());
 
 timeSensor((time) => {
   updateState(site, (state) => {
-    if (state.flat.hallway.lights.ceiling.state === lightState.lightOff && differenceInMinutes(new Date(time), new Date(state.flat.hallway.lights.ceiling.lastChange)) > localSettings.timeout.lightOff) {
+    if (state.flat.hallway.lights.ceiling.state === lightState.off && differenceInMinutes(new Date(time), new Date(state.flat.hallway.lights.ceiling.lastChange)) > localSettings.timeout.lightOff) {
       state.flat.hallway.occupancy.state = occupancyState.unoccupied;
       state.flat.hallway.occupancy.lastChange = new Date();
       state.flat.hallway.lights.ceiling.state = lightState.inherit;
       state.flat.hallway.lights.ceiling.lastChange = new Date();
-    } else if (state.flat.hallway.lights.ceiling.state === lightState.lightOn && differenceInMinutes(new Date(time), new Date(state.flat.hallway.lights.ceiling.lastChange)) > localSettings.timeout.lightOn) {
+    } else if (state.flat.hallway.lights.ceiling.state === lightState.on && differenceInMinutes(new Date(time), new Date(state.flat.hallway.lights.ceiling.lastChange)) > localSettings.timeout.lightOn) {
       state.flat.hallway.lights.ceiling.state = lightState.inherit;
       state.flat.hallway.lights.ceiling.lastChange = new Date();
     }

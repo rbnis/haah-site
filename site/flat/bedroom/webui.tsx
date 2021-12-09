@@ -29,17 +29,17 @@ webuiWidget('Bedroom', () => {
             state.flat.bedroom.lightOn = checked;
 
             if (checked) {
-              if (state.flat.bedroom.lights.readingLeft.state === lightState.lightOn) {
+              if (state.flat.bedroom.lights.readingLeft.state === lightState.on) {
                 state.flat.bedroom.lights.readingLeft.state = lightState.inherit;
               }
-              if (state.flat.bedroom.lights.readingRight.state === lightState.lightOn) {
+              if (state.flat.bedroom.lights.readingRight.state === lightState.on) {
                 state.flat.bedroom.lights.readingRight.state = lightState.inherit;
               }
             } else {
-              if (state.flat.bedroom.lights.readingLeft.state === lightState.lightOff) {
+              if (state.flat.bedroom.lights.readingLeft.state === lightState.off) {
                 state.flat.bedroom.lights.readingLeft.state = lightState.inherit;
               }
-              if (state.flat.bedroom.lights.readingRight.state === lightState.lightOff) {
+              if (state.flat.bedroom.lights.readingRight.state === lightState.off) {
                 state.flat.bedroom.lights.readingRight.state = lightState.inherit;
               }
             }
@@ -48,28 +48,28 @@ webuiWidget('Bedroom', () => {
       />
       <LabeledSwitch
         label={"Reading Light Left"}
-        checked={site.flat.bedroom.lights.readingLeft.state === lightState.lightOn
-          || (site.flat.bedroom.lightOn && site.flat.bedroom.lights.readingLeft.state !== lightState.lightOff)}
+        checked={site.flat.bedroom.lights.readingLeft.state === lightState.on
+          || (site.flat.bedroom.lightOn && site.flat.bedroom.lights.readingLeft.state !== lightState.off)}
         onChange={(checked) =>
           updateState(site, (state) => {
             if (state.flat.bedroom.lightOn === checked) {
               state.flat.bedroom.lights.readingLeft.state = lightState.inherit;
             } else {
-              state.flat.bedroom.lights.readingLeft.state = checked ? lightState.lightOn : lightState.lightOff;
+              state.flat.bedroom.lights.readingLeft.state = checked ? lightState.on : lightState.off;
             }
           })
         }
       />
       <LabeledSwitch
         label={"Reading Light Right"}
-        checked={site.flat.bedroom.lights.readingRight.state === lightState.lightOn
-          || (site.flat.bedroom.lightOn && site.flat.bedroom.lights.readingRight.state !== lightState.lightOff)}
+        checked={site.flat.bedroom.lights.readingRight.state === lightState.on
+          || (site.flat.bedroom.lightOn && site.flat.bedroom.lights.readingRight.state !== lightState.off)}
         onChange={(checked) =>
           updateState(site, (state) => {
             if (state.flat.bedroom.lightOn === checked) {
               state.flat.bedroom.lights.readingRight.state = lightState.inherit;
             } else {
-              state.flat.bedroom.lights.readingRight.state = checked ? lightState.lightOn : lightState.lightOff;
+              state.flat.bedroom.lights.readingRight.state = checked ? lightState.on : lightState.off;
             }
           })
         }

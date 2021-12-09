@@ -20,14 +20,14 @@ const localSettings = {
 
 function kitchenCeilingLight() {
   return () => {
-    if (site.flat.kitchen.lights.ceiling.state === lightState.lightOff) {
+    if (site.flat.kitchen.lights.ceiling.state === lightState.off) {
       return {
         state: 'off',
         transition: localSettings.transition.short,
       }
     }
 
-    if (site.flat.kitchen.lights.ceiling.state === lightState.lightOn) {
+    if (site.flat.kitchen.lights.ceiling.state === lightState.on) {
       return {
         state: 'on',
         transition: localSettings.transition.short,
@@ -63,12 +63,12 @@ mqttActuator('zigbee2mqtt/light/kitchen_ceiling/set', kitchenCeilingLight());
 
 timeSensor((time) => {
   updateState(site, (state) => {
-    if (state.flat.kitchen.lights.ceiling.state === lightState.lightOff && differenceInMinutes(new Date(time), new Date(state.flat.kitchen.lights.ceiling.lastChange)) > localSettings.timeout.lightOff) {
+    if (state.flat.kitchen.lights.ceiling.state === lightState.off && differenceInMinutes(new Date(time), new Date(state.flat.kitchen.lights.ceiling.lastChange)) > localSettings.timeout.lightOff) {
       state.flat.kitchen.occupancy.state = occupancyState.unoccupied;
       state.flat.kitchen.occupancy.lastChange = new Date();
       state.flat.kitchen.lights.ceiling.state = lightState.inherit;
       state.flat.kitchen.lights.ceiling.lastChange = new Date();
-    } else if (state.flat.kitchen.lights.ceiling.state === lightState.lightOn && differenceInMinutes(new Date(time), new Date(state.flat.kitchen.lights.ceiling.lastChange)) > localSettings.timeout.lightOn) {
+    } else if (state.flat.kitchen.lights.ceiling.state === lightState.on && differenceInMinutes(new Date(time), new Date(state.flat.kitchen.lights.ceiling.lastChange)) > localSettings.timeout.lightOn) {
       state.flat.kitchen.lights.ceiling.state = lightState.inherit;
       state.flat.kitchen.lights.ceiling.lastChange = new Date();
     }

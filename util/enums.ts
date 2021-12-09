@@ -1,7 +1,7 @@
 export enum lightState {
   inherit,
-  lightOn,
-  lightOff,
+  on,
+  off,
 }
 
 export enum occupancyState {

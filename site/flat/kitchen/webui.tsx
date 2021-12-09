@@ -10,16 +10,16 @@ webuiWidget('Kitchen', () => {
     <>
       <LabeledSwitch
         label={"Lights"}
-        checked={(site.flat.kitchen.lights.ceiling.state === lightState.lightOn
+        checked={(site.flat.kitchen.lights.ceiling.state === lightState.on
               || (site.flat.kitchen.lights.ceiling.state === lightState.inherit
                 && site.flat.kitchen.occupancy.state === occupancyState.occupied
                 && !site.environment.daylight))}
         onChange={(checked) => {
           updateState(site, (state) => {
             if (checked) {
-              state.flat.kitchen.lights.ceiling.state = lightState.lightOn;
+              state.flat.kitchen.lights.ceiling.state = lightState.on;
             } else {
-              state.flat.kitchen.lights.ceiling.state = lightState.lightOff;
+              state.flat.kitchen.lights.ceiling.state = lightState.off;
             }
             state.flat.kitchen.lights.ceiling.lastChange = new Date();
           });

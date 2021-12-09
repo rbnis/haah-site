@@ -17,29 +17,29 @@ mqttSensor('zigbee2mqtt/switch/bedroom_door_wall', (payload) => {
 
     if (pressCount === 0) {
       updateState(site, (state) => {
-        if (state.flat.bedroom.lightOn && state.flat.bedroom.lights.ceiling.state === lightState.lightOn) {
+        if (state.flat.bedroom.lightOn && state.flat.bedroom.lights.ceiling.state === lightState.on) {
           state.flat.bedroom.lights.ceiling.state = lightState.inherit;
           state.flat.bedroom.lights.ceiling.lastChange = new Date();
         }
-        if (!state.flat.bedroom.lightOn && state.flat.bedroom.lights.ceiling.state === lightState.lightOff) {
+        if (!state.flat.bedroom.lightOn && state.flat.bedroom.lights.ceiling.state === lightState.off) {
           state.flat.bedroom.lights.ceiling.state = lightState.inherit;
           state.flat.bedroom.lights.ceiling.lastChange = new Date();
         }
 
-        if (state.flat.bedroom.lightOn && state.flat.bedroom.lights.readingLeft.state === lightState.lightOn) {
+        if (state.flat.bedroom.lightOn && state.flat.bedroom.lights.readingLeft.state === lightState.on) {
           state.flat.bedroom.lights.readingLeft.state = lightState.inherit;
           state.flat.bedroom.lights.readingLeft.lastChange = new Date();
         }
-        if (!state.flat.bedroom.lightOn && state.flat.bedroom.lights.readingLeft.state === lightState.lightOff) {
+        if (!state.flat.bedroom.lightOn && state.flat.bedroom.lights.readingLeft.state === lightState.off) {
           state.flat.bedroom.lights.readingLeft.state = lightState.inherit;
           state.flat.bedroom.lights.readingLeft.lastChange = new Date();
         }
 
-        if (state.flat.bedroom.lightOn && state.flat.bedroom.lights.readingRight.state === lightState.lightOn) {
+        if (state.flat.bedroom.lightOn && state.flat.bedroom.lights.readingRight.state === lightState.on) {
           state.flat.bedroom.lights.readingRight.state = lightState.inherit;
           state.flat.bedroom.lights.readingRight.lastChange = new Date();
         }
-        if (!state.flat.bedroom.lightOn && state.flat.bedroom.lights.readingRight.state === lightState.lightOff) {
+        if (!state.flat.bedroom.lightOn && state.flat.bedroom.lights.readingRight.state === lightState.off) {
           state.flat.bedroom.lights.readingRight.state = lightState.inherit;
           state.flat.bedroom.lights.readingRight.lastChange = new Date();
         }
@@ -64,13 +64,13 @@ mqttSensor('zigbee2mqtt/switch/bedroom_door_wall', (payload) => {
         state.flat.bedroom.lightOn = true;
         state.flat.bedroom.brightness = 0.3;
         state.flat.bedroom.color = true;
-        state.flat.bedroom.lights.readingLeft.state = lightState.lightOff;
+        state.flat.bedroom.lights.readingLeft.state = lightState.off;
         state.flat.bedroom.lights.readingLeft.lastChange = new Date();
-        state.flat.bedroom.lights.readingRight.state = lightState.lightOff;
+        state.flat.bedroom.lights.readingRight.state = lightState.off;
         state.flat.bedroom.lights.readingRight.lastChange = new Date();
-        state.flat.hallway.lights.ceiling.state = lightState.lightOff;
+        state.flat.hallway.lights.ceiling.state = lightState.off;
         state.flat.hallway.lights.ceiling.lastChange = new Date();
-        state.flat.kitchen.lights.ceiling.state = lightState.lightOff;
+        state.flat.kitchen.lights.ceiling.state = lightState.off;
         state.flat.kitchen.lights.ceiling.lastChange = new Date();
       });
     }
@@ -85,31 +85,31 @@ function bedroomBedSwitch(payload: any) {
           state.flat.bedroom.lights.ceiling.state,
           state.flat.bedroom.lights.readingLeft.state,
           state.flat.bedroom.lights.readingRight.state,
-        ].some(flag => flag === lightState.lightOn) ) {
-          if (state.flat.bedroom.lights.ceiling.state === lightState.lightOn) {
+        ].some(flag => flag === lightState.on) ) {
+          if (state.flat.bedroom.lights.ceiling.state === lightState.on) {
             state.flat.bedroom.lights.ceiling.state = lightState.inherit;
             state.flat.bedroom.lights.ceiling.lastChange = new Date();
           }
-          if (state.flat.bedroom.lights.readingLeft.state === lightState.lightOn) {
+          if (state.flat.bedroom.lights.readingLeft.state === lightState.on) {
             state.flat.bedroom.lights.readingLeft.state = lightState.inherit;
             state.flat.bedroom.lights.readingLeft.lastChange = new Date();
           }
-          if (state.flat.bedroom.lights.readingRight.state === lightState.lightOn) {
+          if (state.flat.bedroom.lights.readingRight.state === lightState.on) {
             state.flat.bedroom.lights.readingRight.state = lightState.inherit;
             state.flat.bedroom.lights.readingRight.lastChange = new Date();
           }
 
           state.flat.bedroom.lightOn = false;
         } else {
-          if (state.flat.bedroom.lights.ceiling.state === lightState.lightOff) {
+          if (state.flat.bedroom.lights.ceiling.state === lightState.off) {
             state.flat.bedroom.lights.ceiling.state = lightState.inherit;
             state.flat.bedroom.lights.ceiling.lastChange = new Date();
           }
-          if (state.flat.bedroom.lights.readingLeft.state === lightState.lightOff) {
+          if (state.flat.bedroom.lights.readingLeft.state === lightState.off) {
             state.flat.bedroom.lights.readingLeft.state = lightState.inherit;
             state.flat.bedroom.lights.readingLeft.lastChange = new Date();
           }
-          if (state.flat.bedroom.lights.readingRight.state === lightState.lightOff) {
+          if (state.flat.bedroom.lights.readingRight.state === lightState.off) {
             state.flat.bedroom.lights.readingRight.state = lightState.inherit;
             state.flat.bedroom.lights.readingRight.lastChange = new Date();
           }
@@ -123,16 +123,16 @@ function bedroomBedSwitch(payload: any) {
   if (payload.action === 'arrow_left_click') {
     updateState(site, (state) => {
       if (state.flat.bedroom.lightOn) {
-        if (state.flat.bedroom.lights.readingLeft.state === lightState.lightOff) {
+        if (state.flat.bedroom.lights.readingLeft.state === lightState.off) {
           state.flat.bedroom.lights.readingLeft.state = lightState.inherit;
         } else {
-          state.flat.bedroom.lights.readingLeft.state = lightState.lightOff;
+          state.flat.bedroom.lights.readingLeft.state = lightState.off;
         }
       } else {
-        if (state.flat.bedroom.lights.readingLeft.state === lightState.lightOn) {
+        if (state.flat.bedroom.lights.readingLeft.state === lightState.on) {
           state.flat.bedroom.lights.readingLeft.state = lightState.inherit;
         } else {
-          state.flat.bedroom.lights.readingLeft.state = lightState.lightOn;
+          state.flat.bedroom.lights.readingLeft.state = lightState.on;
         }
       }
     });
@@ -141,16 +141,16 @@ function bedroomBedSwitch(payload: any) {
   if (payload.action === 'arrow_right_click') {
     updateState(site, (state) => {
       if (state.flat.bedroom.lightOn) {
-        if (state.flat.bedroom.lights.readingRight.state === lightState.lightOff) {
+        if (state.flat.bedroom.lights.readingRight.state === lightState.off) {
           state.flat.bedroom.lights.readingRight.state = lightState.inherit;
         } else {
-          state.flat.bedroom.lights.readingRight.state = lightState.lightOff;
+          state.flat.bedroom.lights.readingRight.state = lightState.off;
         }
       } else {
-        if (state.flat.bedroom.lights.readingRight.state === lightState.lightOn) {
+        if (state.flat.bedroom.lights.readingRight.state === lightState.on) {
           state.flat.bedroom.lights.readingRight.state = lightState.inherit;
         } else {
-          state.flat.bedroom.lights.readingRight.state = lightState.lightOn;
+          state.flat.bedroom.lights.readingRight.state = lightState.on;
         }
       }
     });
