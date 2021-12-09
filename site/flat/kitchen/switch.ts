@@ -15,7 +15,7 @@ mqttSensor('zigbee2mqtt/switch/kitchen_door_wall', (payload) => {
         state.flat.kitchen.lights.ceiling.state = lightState.lightOff;
         state.flat.kitchen.lights.ceiling.lastChange = new Date();
       } else {
-        state.flat.kitchen.lights.ceiling.state = lightState.lightOff;
+        state.flat.kitchen.lights.ceiling.state = lightState.lightOn;
         state.flat.kitchen.lights.ceiling.lastChange = new Date();
       }
     });

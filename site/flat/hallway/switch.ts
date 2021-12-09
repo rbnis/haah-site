@@ -15,7 +15,7 @@ mqttSensor('zigbee2mqtt/switch/hallway_door_1', (payload) => {
         state.flat.hallway.lights.ceiling.state = lightState.lightOff;
         state.flat.hallway.lights.ceiling.lastChange = new Date();
       } else {
-        state.flat.hallway.lights.ceiling.state = lightState.lightOff;
+        state.flat.hallway.lights.ceiling.state = lightState.lightOn;
         state.flat.hallway.lights.ceiling.lastChange = new Date();
       }
     });
@@ -34,7 +34,7 @@ mqttSensor('zigbee2mqtt/switch/hallway_door_2', (payload) => {
         state.flat.hallway.lights.ceiling.state = lightState.lightOff;
         state.flat.hallway.lights.ceiling.lastChange = new Date();
       } else {
-        state.flat.hallway.lights.ceiling.state = lightState.lightOff;
+        state.flat.hallway.lights.ceiling.state = lightState.lightOn;
         state.flat.hallway.lights.ceiling.lastChange = new Date();
       }
     });
@@ -58,5 +58,5 @@ mqttSensor('zigbee2mqtt/switch/hallway_entry', (payload) => {
       state.flat.kitchen.lights.ceiling.lastChange = new Date();
       state.flat.livingroom.lightOn = false;
   })}
-    });
+});
 
