@@ -7,6 +7,10 @@ export const settings = {
     productive: { r: 255, g: 226, b: 162 },
     uhlala: { r: 255, g: 0, b: 0 },
   },
+  colortemperature: {
+    default: 350,
+    productive: 300,
+  },
   transition: {
     short: 0.3,
     long: 15,

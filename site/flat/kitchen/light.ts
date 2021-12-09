@@ -1,4 +1,4 @@
-import { site } from "../..";
+import { site, settings } from "../..";
 import { mqttActuator, timeSensor, updateState } from 'haah';
 import { differenceInMinutes } from 'date-fns';
 import { lightState, occupancyState } from '../../../util/enums';
@@ -23,7 +23,7 @@ function kitchenCeilingLight() {
     if (site.flat.kitchen.lights.ceiling.state === lightState.lightOff) {
       return {
         state: 'off',
-        transition: localSettings.transition.short
+        transition: localSettings.transition.short,
       }
     }
 
@@ -32,20 +32,21 @@ function kitchenCeilingLight() {
         state: 'on',
         transition: localSettings.transition.short,
         brightness: 255 * localSettings.brightness.day,
+        color_temp: settings.colortemperature.default,
       }
     }
 
     if (site.flat.kitchen.occupancy.state !== occupancyState.occupied) {
       return {
         state: 'off',
-        transition: localSettings.transition.long
+        transition: localSettings.transition.long,
       }
     }
 
     if (site.environment.daylight) {
       return {
         state: 'off',
-        transition: localSettings.transition.long
+        transition: localSettings.transition.long,
       }
     }
 
@@ -53,6 +54,7 @@ function kitchenCeilingLight() {
       state: 'on',
       transition: localSettings.transition.short,
       brightness: 255 * (site.environment.daytime ? localSettings.brightness.day : localSettings.brightness.night),
+      color_temp: settings.colortemperature.default,
     }
   }
 }

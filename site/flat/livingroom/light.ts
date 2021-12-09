@@ -13,7 +13,7 @@ function livingroomCeilingLight() {
     if (!site.flat.livingroom.lightOn) {
       return {
         state: 'off',
-        transition: settings.transition.short
+        transition: settings.transition.short,
       }
     }
 
@@ -21,6 +21,7 @@ function livingroomCeilingLight() {
       state: 'on',
       transition: settings.transition.short,
       brightness: 255 * site.flat.livingroom.brightness,
+      color_temp: settings.colortemperature.default,
     }
   }
 }
@@ -33,7 +34,7 @@ mqttActuator('zigbee2mqtt/light/livingroom_desk/set', () => {
   if (!site.flat.livingroom.lightOn) {
     return {
       state: 'off',
-      transition: settings.transition.short
+      transition: settings.transition.short,
     }
   }
 
@@ -51,7 +52,7 @@ mqttActuator('zigbee2mqtt/light/livingroom_couch/set', () => {
   if (!site.flat.livingroom.lightOn) {
     return {
       state: 'off',
-      transition: settings.transition.short
+      transition: settings.transition.short,
     }
   }
 

@@ -19,7 +19,7 @@ function hallwayCeilingLight() {
     if (site.flat.hallway.lights.ceiling.state === lightState.lightOff) {
       return {
         state: 'off',
-        transition: settings.transition.short
+        transition: settings.transition.short,
       }
     }
 
@@ -28,20 +28,21 @@ function hallwayCeilingLight() {
         state: 'on',
         transition: settings.transition.short,
         brightness: 255 * (site.environment.daytime ? localSettings.brightness.day : localSettings.brightness.night),
+        color_temp: settings.colortemperature.default,
       }
     }
 
     if (site.flat.hallway.occupancy.state !== occupancyState.occupied) {
       return {
         state: 'off',
-        transition: settings.transition.long
+        transition: settings.transition.long,
       }
     }
 
     if (site.environment.daylight) {
       return {
         state: 'off',
-        transition: settings.transition.long
+        transition: settings.transition.long,
       }
     }
 
@@ -49,6 +50,7 @@ function hallwayCeilingLight() {
       state: 'on',
       transition: settings.transition.short,
       brightness: 255 * (site.environment.daytime ? localSettings.brightness.day : localSettings.brightness.night),
+      color_temp: settings.colortemperature.default,
     }
   }
 }
