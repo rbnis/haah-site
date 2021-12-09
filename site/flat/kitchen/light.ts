@@ -64,6 +64,8 @@ mqttActuator('zigbee2mqtt/light/kitchen_ceiling/set', kitchenCeilingLight());
 timeSensor((time) => {
   updateState(site, (state) => {
     if (state.flat.kitchen.lights.ceiling.state === lightState.lightOff && differenceInMinutes(new Date(time), new Date(state.flat.kitchen.lights.ceiling.lastChange)) > localSettings.timeout.lightOff) {
+      state.flat.kitchen.occupancy.state = occupancyState.unoccupied;
+      state.flat.kitchen.occupancy.lastChange = new Date();
       state.flat.kitchen.lights.ceiling.state = lightState.inherit;
       state.flat.kitchen.lights.ceiling.lastChange = new Date();
     } else if (state.flat.kitchen.lights.ceiling.state === lightState.lightOn && differenceInMinutes(new Date(time), new Date(state.flat.kitchen.lights.ceiling.lastChange)) > localSettings.timeout.lightOn) {
