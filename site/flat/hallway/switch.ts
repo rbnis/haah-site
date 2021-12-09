@@ -1,24 +1,47 @@
+import { site } from "../..";
 import { mqttSensor, updateState } from 'haah';
-import { switchToggleMotionOverwrite } from '../../../util/motion';
-import { taints } from '../../../util/enums'
+import { lightState, occupancyState } from '../../../util/enums';
 
-import { hallway } from ".";
-import { kitchen } from "../kitchen";
-import { livingroom } from "../livingroom";
-import { bedroom } from "../bedroom";
-
-let overwriteTimeout: NodeJS.Timeout;
 mqttSensor('zigbee2mqtt/switch/hallway_door_1', (payload) => {
   if (payload.action === 'left_press') {
-    switchToggleMotionOverwrite(hallway, overwriteTimeout, 5, 60 * 30);
+    updateState(site, (state) => {
+      if (state.flat.hallway.lights.ceiling.state === lightState.lightOn) {
+        state.flat.hallway.lights.ceiling.state = lightState.lightOff;
+        state.flat.hallway.lights.ceiling.lastChange = new Date();
+      } else if (state.flat.hallway.lights.ceiling.state === lightState.lightOff) {
+        state.flat.hallway.lights.ceiling.state = lightState.lightOn;
+        state.flat.hallway.lights.ceiling.lastChange = new Date();
+      } else if (state.flat.hallway.occupancy.state === occupancyState.occupied && !state.environment.daylight) {
+        state.flat.hallway.lights.ceiling.state = lightState.lightOff;
+        state.flat.hallway.lights.ceiling.lastChange = new Date();
+      } else {
+        state.flat.hallway.lights.ceiling.state = lightState.lightOff;
+        state.flat.hallway.lights.ceiling.lastChange = new Date();
+      }
+    });
   }
 });
 mqttSensor('zigbee2mqtt/switch/hallway_door_2', (payload) => {
   if (payload.action === 'left_press') {
-    switchToggleMotionOverwrite(hallway, overwriteTimeout, 5, 60 * 30);
+    updateState(site, (state) => {
+      if (state.flat.hallway.lights.ceiling.state === lightState.lightOn) {
+        state.flat.hallway.lights.ceiling.state = lightState.lightOff;
+        state.flat.hallway.lights.ceiling.lastChange = new Date();
+      } else if (state.flat.hallway.lights.ceiling.state === lightState.lightOff) {
+        state.flat.hallway.lights.ceiling.state = lightState.lightOn;
+        state.flat.hallway.lights.ceiling.lastChange = new Date();
+      } else if (state.flat.hallway.occupancy.state === occupancyState.occupied && !state.environment.daylight) {
+        state.flat.hallway.lights.ceiling.state = lightState.lightOff;
+        state.flat.hallway.lights.ceiling.lastChange = new Date();
+      } else {
+        state.flat.hallway.lights.ceiling.state = lightState.lightOff;
+        state.flat.hallway.lights.ceiling.lastChange = new Date();
+      }
+    });
   }
 });
 
+/*
 let overwriteTimeoutKitchen: NodeJS.Timeout;
 mqttSensor('zigbee2mqtt/switch/hallway_entry', (payload) => {
   if (payload.action === 'on') {
@@ -64,3 +87,4 @@ mqttSensor('zigbee2mqtt/switch/hallway_entry', (payload) => {
     }, 1000 * 60 * 5);
   }
 });
+*/

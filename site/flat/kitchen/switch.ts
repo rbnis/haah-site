@@ -1,11 +1,23 @@
-import { mqttSensor } from 'haah';
-import { switchToggleMotionOverwrite } from '../../../util/motion';
+import { site } from "../..";
+import { mqttSensor, updateState } from 'haah';
+import { lightState, occupancyState } from '../../../util/enums';
 
-import { kitchen } from ".";
-
-let overwriteTimeout: NodeJS.Timeout;
 mqttSensor('zigbee2mqtt/switch/kitchen_door_wall', (payload) => {
   if (payload.action === 'left_press') {
-    switchToggleMotionOverwrite(kitchen, overwriteTimeout, 5, 60 * 60)
+    updateState(site, (state) => {
+      if (state.flat.kitchen.lights.ceiling.state === lightState.lightOn) {
+        state.flat.kitchen.lights.ceiling.state = lightState.lightOff;
+        state.flat.kitchen.lights.ceiling.lastChange = new Date();
+      } else if (state.flat.kitchen.lights.ceiling.state === lightState.lightOff) {
+        state.flat.kitchen.lights.ceiling.state = lightState.lightOn;
+        state.flat.kitchen.lights.ceiling.lastChange = new Date();
+      } else if (state.flat.kitchen.occupancy.state === occupancyState.occupied && !state.environment.daylight) {
+        state.flat.kitchen.lights.ceiling.state = lightState.lightOff;
+        state.flat.kitchen.lights.ceiling.lastChange = new Date();
+      } else {
+        state.flat.kitchen.lights.ceiling.state = lightState.lightOff;
+        state.flat.kitchen.lights.ceiling.lastChange = new Date();
+      }
+    });
   }
 });

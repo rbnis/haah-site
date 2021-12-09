@@ -1,7 +1,12 @@
-export enum taints {
-  none,
+export enum lightState {
+  inherit,
   lightOn,
   lightOff,
+}
+
+export enum occupancyState {
+  unoccupied,
+  occupied,
 }
 
 export enum windowState {

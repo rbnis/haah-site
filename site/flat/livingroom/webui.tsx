@@ -1,20 +1,9 @@
-import { state, updateState, webuiWidget } from 'haah';
-import { LabeledSwitch, LabeledSlider, LabeledLabel } from '../../../util/frontend';
-import React from 'react';
-
+import { site } from "../..";
+import { updateState, webuiWidget } from 'haah';
 import { windowState } from '../../../util/enums';
 
-export const livingroom = state('livingroom', {
-  lightOn: false,
-  brightness: 0.8,
-  productive: false,
-  window: windowState.open,
-  humidity: 0.00,
-  pressure: 0.0,
-  temperature: 0.00,
-  temperatureTarget: 21.00,
-  temperatureThermostat: 0.00,
-});
+import React from 'react';
+import { LabeledSwitch, LabeledSlider, LabeledLabel } from '../../../util/frontend';
 
 webuiWidget('Living Room', () => {
   const temperatureMarks = {
@@ -34,59 +23,59 @@ webuiWidget('Living Room', () => {
     <>
       <LabeledSwitch
         label={"Lights"}
-        checked={livingroom.lightOn}
+        checked={site.flat.livingroom.lightOn}
         onChange={(checked) =>
-          updateState(livingroom, (state) => {
-            state.lightOn = checked;
+          updateState(site, (state) => {
+            state.flat.livingroom.lightOn = checked;
           })
         }
       />
       <LabeledSwitch
         label={"Productive"}
-        checked={livingroom.productive}
+        checked={site.flat.livingroom.productive}
         onChange={(checked) =>
-          updateState(livingroom, (state) => {
-            state.productive = checked;
+          updateState(site, (state) => {
+            state.flat.livingroom.productive = checked;
           })
         }
       />
       <LabeledSlider
         label={"Brightness"}
-        value={livingroom.brightness}
+        value={site.flat.livingroom.brightness}
         min={0.05}
         step={0.05}
         max={1.0}
         marks={brightnessMarks}
         onChange={(brightness: number) =>
-          updateState(livingroom, (state) => {
-            state.brightness = brightness;
+          updateState(site, (state) => {
+            state.flat.livingroom.brightness = brightness;
           })
         }
       />
       <LabeledSlider
         label={"Temperature"}
-        value={livingroom.temperatureTarget}
+        value={site.flat.livingroom.climate.temperatureTarget}
         min={10}
         step={0.5}
         max={30}
         marks={temperatureMarks}
         onChange={(temperatureTarget: number) =>
-          updateState(livingroom, (state) => {
-            state.temperatureTarget = temperatureTarget;
+          updateState(site, (state) => {
+            state.flat.livingroom.climate.temperatureTarget = temperatureTarget;
           })
         }
       />
       <LabeledLabel
         label={"Temperature"}
-        value={livingroom.temperature + " °C"}
+        value={site.flat.livingroom.climate.temperature + " °C"}
       />
       <LabeledLabel
         label={"Humidity"}
-        value={livingroom.humidity + " %"}
+        value={site.flat.livingroom.climate.humidity + " %"}
       />
       <LabeledLabel
         label={"Balcony door"}
-        value={livingroom.window == windowState.closed ? "Closed" : "Open"}
+        value={site.flat.livingroom.windows.balcony.state === windowState.closed ? "Closed" : "Open"}
       />
     </>
   );

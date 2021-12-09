@@ -1,32 +1,26 @@
-import { state, updateState, timeSensor, weatherSensor } from 'haah';
-
+import { site } from '.';
+import { updateState, timeSensor, weatherSensor } from 'haah';
 import { secret } from '../secrets';
-import { isTimeBetween } from '../util/time';
+import { isTimeBetween } from '../util/utils';
 
-export const environment = state('environment', {
-  time: new Date(),
-  weather: null,
-  daytime: false,
-  daylight: false,
-});
 
 timeSensor((time) => {
-  updateState(environment, (environment) => {
-    environment.time = time;
+  updateState(site, (site) => {
+    site.environment.time = time;
   });
 
-  updateState(environment, (environment) =>{
-    environment.daytime = isDayTime(time);
+  updateState(site, (site) =>{
+    site.environment.daytime = isDayTime(time);
   });
 });
 
 weatherSensor(secret.openWeatherMapApiKey, secret.location.lat, secret.location.lon, (weather) => {
-  updateState(environment, (environment) => {
-    environment.weather = weather;
+  updateState(site, (site) => {
+    site.environment.weather = weather;
   });
 
-  updateState(environment, (environment) => {
-    environment.daylight = isDaylight(weather.today.sunriseTime, weather.today.sunsetTime, environment.time);
+  updateState(site, (site) => {
+    site.environment.daylight = isDaylight(weather.today.sunriseTime, weather.today.sunsetTime, site.environment.time);
   });
 });
 

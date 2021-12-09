@@ -1,21 +1,22 @@
-import { mqttSensor, updateState } from 'haah';
+import { site } from "../..";
+import { mqttSensor, timeSensor, updateState } from 'haah';
+import { differenceInMinutes } from 'date-fns';
+import { occupancyState } from '../../../util/enums';
 
-import { hallway } from ".";
-
-let occupancyTimeout: NodeJS.Timeout;
 mqttSensor('zigbee2mqtt/motion/hallway', (payload) => {
   if (payload.occupancy === true) {
-    updateState(hallway, (state) => {
-      state.occupied = true;
-      });
-    }
+    updateState(site, (state) => {
+      state.flat.hallway.occupancy.state = occupancyState.occupied;
+      state.flat.hallway.occupancy.lastChange = new Date();
+    });
+  }
+});
 
-    if (occupancyTimeout) {
-      clearTimeout(occupancyTimeout);
+timeSensor((time) => {
+  updateState(site, (state) => {
+    if (state.flat.hallway.occupancy.state === occupancyState.occupied && differenceInMinutes(new Date(time), new Date(state.flat.hallway.occupancy.lastChange)) > 3) {
+      state.flat.hallway.occupancy.state = occupancyState.unoccupied;
+      state.flat.hallway.occupancy.lastChange = new Date();
     }
-    occupancyTimeout = setTimeout(() => {
-      updateState(hallway, (state) => {
-        state.occupied = false;
-      });
-    }, 1000 * 60 * 3);
+  });
 });

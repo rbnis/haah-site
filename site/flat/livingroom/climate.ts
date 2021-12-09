@@ -1,47 +1,48 @@
+import { site } from "../..";
 import { mqttActuator, mqttSensor, updateState } from "haah";
 import { windowState } from "../../../util/enums";
-import { environment } from "../../environment";
-
-import { livingroom } from ".";
 
 mqttSensor('zigbee2mqtt/temperature/livingroom', (payload) => {
   if ('humidity' in payload) {
-    updateState(livingroom, (state) => {
-      state.humidity = payload.humidity;
+    updateState(site, (state) => {
+      state.flat.livingroom.climate.humidity = payload.humidity;
     });
   }
   if ('pressure' in payload) {
-    updateState(livingroom, (state) => {
-      state.pressure = payload.pressure;
+    updateState(site, (state) => {
+      state.flat.livingroom.climate.pressure = payload.pressure;
     });
   }
   if ('temperature' in payload) {
-    updateState(livingroom, (state) => {
-      state.temperature = payload.temperature
+    updateState(site, (state) => {
+      state.flat.livingroom.climate.temperature = payload.temperature
     });
   }
 });
 
 mqttSensor('zigbee2mqtt/climate/livingroom', (payload) => {
   if ('local_temperature' in payload) {
-    updateState(livingroom, (state) => {
-      state.temperatureThermostat = payload.local_temperature;
+    updateState(site, (state) => {
+      state.flat.livingroom.climate.temperatureThermostat = payload.local_temperature;
     });
   }
 });
 
 mqttSensor('zigbee2mqtt/contact/livingroom_balcony_door', (payload) => {
   if ('contact' in payload) {
-    updateState(livingroom, (state) => {
-      state.window = payload.contact ? windowState.closed : windowState.open;
+    updateState(site, (state) => {
+      state.flat.livingroom.windows.balcony.state = payload.contact ? windowState.closed : windowState.open;
+      state.flat.livingroom.windows.balcony.lastChange = new Date();
     });
   }
 });
 
 mqttActuator('zigbee2mqtt/climate/livingroom/set', () => {
-  if (livingroom.window === windowState.closed && environment.daytime) {
+  if (site.flat.livingroom.windows.balcony.state === windowState.closed && site.environment.daytime) {
     return {
-      current_heating_setpoint: livingroom.temperatureThermostat + (livingroom.temperatureTarget - livingroom.temperature),
+      current_heating_setpoint: site.flat.livingroom.climate.temperatureThermostat
+        + (site.flat.livingroom.climate.temperatureTarget
+          - site.flat.livingroom.climate.temperature),
     }
   }
   return {

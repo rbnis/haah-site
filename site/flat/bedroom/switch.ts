@@ -1,66 +1,170 @@
+import { site } from "../..";
 import { mqttSensor, updateState } from 'haah';
-import { taints } from '../../../util/enums';
+import { differenceInMilliseconds } from 'date-fns';
+import { lightState } from '../../../util/enums';
+import { clamp } from '../../../util/utils';
 
-import { bedroom } from ".";
-
+let lastPress: Date;
+let pressCount = 0;
 mqttSensor('zigbee2mqtt/switch/bedroom_door_wall', (payload) => {
   if (payload.action === 'left_press') {
-    updateState(bedroom, (state) => {
-      state.overwrites.readingLeft = (state.lightOn && state.overwrites.readingLeft === taints.lightOn)
-        || (!state.lightOn && state.overwrites.readingLeft === taints.lightOff)
-          ? taints.none
-          : state.overwrites.readingLeft;
-      state.overwrites.readingRight = (state.lightOn && state.overwrites.readingRight === taints.lightOn)
-        || (!state.lightOn && state.overwrites.readingRight === taints.lightOff)
-          ? taints.none
-          : state.overwrites.readingRight;
-      state.lightOn = !state.lightOn;
-    });
+    if (lastPress && differenceInMilliseconds(new Date(), new Date(lastPress)) <= 350) {
+      pressCount++;
+    } else {
+      pressCount = 0;
+    }
+    lastPress = new Date();
+
+    if (pressCount === 0) {
+      updateState(site, (state) => {
+        if (state.flat.bedroom.lightOn && state.flat.bedroom.lights.ceiling.state === lightState.lightOn) {
+          state.flat.bedroom.lights.ceiling.state = lightState.inherit;
+          state.flat.bedroom.lights.ceiling.lastChange = new Date();
+        }
+        if (!state.flat.bedroom.lightOn && state.flat.bedroom.lights.ceiling.state === lightState.lightOff) {
+          state.flat.bedroom.lights.ceiling.state = lightState.inherit;
+          state.flat.bedroom.lights.ceiling.lastChange = new Date();
+        }
+
+        if (state.flat.bedroom.lightOn && state.flat.bedroom.lights.readingLeft.state === lightState.lightOn) {
+          state.flat.bedroom.lights.readingLeft.state = lightState.inherit;
+          state.flat.bedroom.lights.readingLeft.lastChange = new Date();
+        }
+        if (!state.flat.bedroom.lightOn && state.flat.bedroom.lights.readingLeft.state === lightState.lightOff) {
+          state.flat.bedroom.lights.readingLeft.state = lightState.inherit;
+          state.flat.bedroom.lights.readingLeft.lastChange = new Date();
+        }
+
+        if (state.flat.bedroom.lightOn && state.flat.bedroom.lights.readingRight.state === lightState.lightOn) {
+          state.flat.bedroom.lights.readingRight.state = lightState.inherit;
+          state.flat.bedroom.lights.readingRight.lastChange = new Date();
+        }
+        if (!state.flat.bedroom.lightOn && state.flat.bedroom.lights.readingRight.state === lightState.lightOff) {
+          state.flat.bedroom.lights.readingRight.state = lightState.inherit;
+          state.flat.bedroom.lights.readingRight.lastChange = new Date();
+        }
+
+        state.flat.bedroom.lightOn = !state.flat.bedroom.lightOn;
+        state.flat.bedroom.color = false;
+      });
+    } else if (pressCount == 1) {
+      updateState(site, (state) => {
+        state.flat.bedroom.lightOn = true;
+        state.flat.bedroom.brightness = 1.0;
+        state.flat.bedroom.color = false;
+      });
+    } else if (pressCount == 2) {
+      updateState(site, (state) => {
+        state.flat.bedroom.lightOn = true;
+        state.flat.bedroom.brightness = 0.1;
+        state.flat.bedroom.color = false;
+      });
+    } else if (pressCount == 5) {
+      updateState(site, (state) => {
+        state.flat.bedroom.lightOn = true;
+        state.flat.bedroom.brightness = 0.3;
+        state.flat.bedroom.color = true;
+        state.flat.bedroom.lights.readingLeft.state = lightState.lightOff;
+        state.flat.bedroom.lights.readingLeft.lastChange = new Date();
+        state.flat.bedroom.lights.readingRight.state = lightState.lightOff;
+        state.flat.bedroom.lights.readingRight.lastChange = new Date();
+        state.flat.hallway.lights.ceiling.state = lightState.lightOff;
+        state.flat.hallway.lights.ceiling.lastChange = new Date();
+        state.flat.kitchen.lights.ceiling.state = lightState.lightOff;
+        state.flat.kitchen.lights.ceiling.lastChange = new Date();
+      });
+    }
   }
 });
 
 function bedroomBedSwitch(payload: any) {
   if (payload.action === 'toggle') {
-    updateState(bedroom, (state) => {
-      if ( state.lightOn ||
-           [state.overwrites.ceiling, state.overwrites.readingLeft, state.overwrites.readingRight].some(overwrite => overwrite === taints.lightOn) ) {
-          state.lightOn = false;
-          state.overwrites.ceiling = taints.none;
-          state.overwrites.readingLeft = taints.none;
-          state.overwrites.readingRight = taints.none;
+    updateState(site, (state) => {
+      if ( state.flat.bedroom.lightOn ||
+        [
+          state.flat.bedroom.lights.ceiling.state,
+          state.flat.bedroom.lights.readingLeft.state,
+          state.flat.bedroom.lights.readingRight.state,
+        ].some(flag => flag === lightState.lightOn) ) {
+          if (state.flat.bedroom.lights.ceiling.state === lightState.lightOn) {
+            state.flat.bedroom.lights.ceiling.state = lightState.inherit;
+            state.flat.bedroom.lights.ceiling.lastChange = new Date();
+          }
+          if (state.flat.bedroom.lights.readingLeft.state === lightState.lightOn) {
+            state.flat.bedroom.lights.readingLeft.state = lightState.inherit;
+            state.flat.bedroom.lights.readingLeft.lastChange = new Date();
+          }
+          if (state.flat.bedroom.lights.readingRight.state === lightState.lightOn) {
+            state.flat.bedroom.lights.readingRight.state = lightState.inherit;
+            state.flat.bedroom.lights.readingRight.lastChange = new Date();
+          }
+
+          state.flat.bedroom.lightOn = false;
         } else {
-          state.lightOn = true;
+          if (state.flat.bedroom.lights.ceiling.state === lightState.lightOff) {
+            state.flat.bedroom.lights.ceiling.state = lightState.inherit;
+            state.flat.bedroom.lights.ceiling.lastChange = new Date();
+          }
+          if (state.flat.bedroom.lights.readingLeft.state === lightState.lightOff) {
+            state.flat.bedroom.lights.readingLeft.state = lightState.inherit;
+            state.flat.bedroom.lights.readingLeft.lastChange = new Date();
+          }
+          if (state.flat.bedroom.lights.readingRight.state === lightState.lightOff) {
+            state.flat.bedroom.lights.readingRight.state = lightState.inherit;
+            state.flat.bedroom.lights.readingRight.lastChange = new Date();
+          }
+
+          state.flat.bedroom.lightOn = true;
         }
+        state.flat.bedroom.color = true;
     });
   }
 
   if (payload.action === 'arrow_left_click') {
-    updateState(bedroom, (state) => {
-      state.overwrites.readingLeft = state.overwrites.readingLeft === taints.lightOn
-        || (state.lightOn && state.overwrites.readingLeft === taints.none)
-          ? taints.lightOff
-          : taints.lightOn;
-        });
+    updateState(site, (state) => {
+      if (state.flat.bedroom.lightOn) {
+        if (state.flat.bedroom.lights.readingLeft.state === lightState.lightOff) {
+          state.flat.bedroom.lights.readingLeft.state = lightState.inherit;
+        } else {
+          state.flat.bedroom.lights.readingLeft.state = lightState.lightOff;
+        }
+      } else {
+        if (state.flat.bedroom.lights.readingLeft.state === lightState.lightOn) {
+          state.flat.bedroom.lights.readingLeft.state = lightState.inherit;
+        } else {
+          state.flat.bedroom.lights.readingLeft.state = lightState.lightOn;
+        }
       }
+    });
+  }
 
   if (payload.action === 'arrow_right_click') {
-    updateState(bedroom, (state) => {
-      state.overwrites.readingRight = state.overwrites.readingRight === taints.lightOn
-        || (state.lightOn && state.overwrites.readingRight === taints.none)
-          ? taints.lightOff
-          : taints.lightOn;
+    updateState(site, (state) => {
+      if (state.flat.bedroom.lightOn) {
+        if (state.flat.bedroom.lights.readingRight.state === lightState.lightOff) {
+          state.flat.bedroom.lights.readingRight.state = lightState.inherit;
+        } else {
+          state.flat.bedroom.lights.readingRight.state = lightState.lightOff;
+        }
+      } else {
+        if (state.flat.bedroom.lights.readingRight.state === lightState.lightOn) {
+          state.flat.bedroom.lights.readingRight.state = lightState.inherit;
+        } else {
+          state.flat.bedroom.lights.readingRight.state = lightState.lightOn;
+        }
+      }
     });
   }
 
   if (payload.action === 'brightness_up_click') {
-    updateState(bedroom, (state) => {
-      state.brightness = state.brightness >= 1.0 ? 1.0 : state.brightness+0.1;
+    updateState(site, (state) => {
+      state.flat.bedroom.brightness = clamp(0.1, 1.0)(state.flat.bedroom.brightness + 0.1);
     });
   }
 
   if (payload.action === 'brightness_down_click') {
-    updateState(bedroom, (state) => {
-      state.brightness = state.brightness <= 0.1 ? 0.1 : state.brightness-0.1;
+    updateState(site, (state) => {
+      state.flat.bedroom.brightness = clamp(0.1, 1.0)(state.flat.bedroom.brightness - 0.1);
     });
   }
 }

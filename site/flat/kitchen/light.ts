@@ -1,33 +1,72 @@
-import { mqttActuator } from 'haah';
-import { environment } from '../../environment';
-import { taints } from '../../../util/enums';
+import { site } from "../..";
+import { mqttActuator, timeSensor, updateState } from 'haah';
+import { differenceInMinutes } from 'date-fns';
+import { lightState, occupancyState } from '../../../util/enums';
 
-import { kitchen } from ".";
+const localSettings = {
+  brightness: {
+    day: 0.8,
+    night: 0.33,
+  },
+  transition: {
+    short: 0.3,
+    long: 15,
+  },
+  timeout: {
+    lightOn: 60,
+    lightOff: 5,
+  },
+}
 
-mqttActuator('zigbee2mqtt/light/kitchen_ceiling/set', () => {
-  if (kitchen.overwrites.ceiling === taints.lightOff) {
-    return { state: 'off', transition: 0.3 }
-  }
+function kitchenCeilingLight() {
+  return () => {
+    if (site.flat.kitchen.lights.ceiling.state === lightState.lightOff) {
+      return {
+        state: 'off',
+        transition: localSettings.transition.short
+      }
+    }
 
-  if (kitchen.overwrites.ceiling === taints.lightOn) {
+    if (site.flat.kitchen.lights.ceiling.state === lightState.lightOn) {
+      return {
+        state: 'on',
+        transition: localSettings.transition.short,
+        brightness: 255 * localSettings.brightness.day,
+      }
+    }
+
+    if (site.flat.kitchen.occupancy.state !== occupancyState.occupied) {
+      return {
+        state: 'off',
+        transition: localSettings.transition.long
+      }
+    }
+
+    if (site.environment.daylight) {
+      return {
+        state: 'off',
+        transition: localSettings.transition.long
+      }
+    }
+
     return {
       state: 'on',
-      transition: 0.3,
-      brightness: 255 * 0.75,
+      transition: localSettings.transition.short,
+      brightness: 255 * (site.environment.daytime ? localSettings.brightness.day : localSettings.brightness.night),
     }
   }
+}
 
-  if (!kitchen.occupied) {
-    return { state: 'off', transition: 15 }
-  }
+mqttActuator('zigbee2mqtt/light/kitchen_ceiling/set', kitchenCeilingLight());
 
-  if (environment.daylight) {
-    return { state: 'off', transition: 15 }
-  }
-
-  return {
-    state: 'on',
-    transition: 0.3,
-    brightness: 255 * (environment.daytime ? 0.75 : 0.33),
-  }
+timeSensor((time) => {
+  updateState(site, (state) => {
+    if (state.flat.kitchen.lights.ceiling.state === lightState.lightOff && differenceInMinutes(new Date(time), new Date(state.flat.kitchen.lights.ceiling.lastChange)) > localSettings.timeout.lightOff) {
+      state.flat.kitchen.lights.ceiling.state = lightState.inherit;
+      state.flat.kitchen.lights.ceiling.lastChange = new Date();
+    } else if (state.flat.kitchen.lights.ceiling.state === lightState.lightOn && differenceInMinutes(new Date(time), new Date(state.flat.kitchen.lights.ceiling.lastChange)) > localSettings.timeout.lightOn) {
+      state.flat.kitchen.lights.ceiling.state = lightState.inherit;
+      state.flat.kitchen.lights.ceiling.lastChange = new Date();
+    }
+  });
 });
