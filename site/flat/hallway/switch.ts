@@ -41,50 +41,22 @@ mqttSensor('zigbee2mqtt/switch/hallway_door_2', (payload) => {
   }
 });
 
-/*
-let overwriteTimeoutKitchen: NodeJS.Timeout;
 mqttSensor('zigbee2mqtt/switch/hallway_entry', (payload) => {
   if (payload.action === 'on') {
-    updateState(hallway, (state) => {
-      state.overwrites.ceiling = taints.lightOn;
+    updateState(site, (state) => {
+      state.flat.hallway.lights.ceiling.state = lightState.lightOn;
+      state.flat.hallway.lights.ceiling.lastChange = new Date();
     });
-
-    if (overwriteTimeout) {
-      clearTimeout(overwriteTimeout);
-    }
-    overwriteTimeout = setTimeout(() => {
-      updateState(hallway, (state) => {
-        state.overwrites.ceiling = taints.none;
-      });
-    }, 1000 * 60 * 30);
   }
 
   if (payload.action === 'off') {
-    updateState(bedroom, (state) => {
-      state.lightOn = false;
-    });
-    updateState(livingroom, (state) => {
-      state.lightOn = false;
-    });
-    updateState(hallway, (state) => {
-      state.overwrites.ceiling = taints.lightOff;
-    });
-    updateState(kitchen, (state) => {
-      state.overwrites.ceiling = taints.lightOff;
+    updateState(site, (state) => {
+      state.flat.bedroom.lightOn = false;
+      state.flat.hallway.lights.ceiling.state = lightState.lightOff;
+      state.flat.hallway.lights.ceiling.lastChange = new Date();
+      state.flat.kitchen.lights.ceiling.state = lightState.lightOff;
+      state.flat.kitchen.lights.ceiling.lastChange = new Date();
+      state.flat.livingroom.lightOn = false;
+  })}
     });
 
-    if (overwriteTimeout) clearTimeout(overwriteTimeout);
-    if (overwriteTimeoutKitchen) clearTimeout(overwriteTimeoutKitchen);
-    overwriteTimeout = setTimeout(() => {
-      updateState(hallway, (state) => {
-        state.overwrites.ceiling = taints.none;
-      });
-    }, 1000 * 60 * 5);
-    overwriteTimeoutKitchen = setTimeout(() => {
-      updateState(kitchen, (state) => {
-        state.overwrites.ceiling = taints.none;
-      });
-    }, 1000 * 60 * 5);
-  }
-});
-*/
