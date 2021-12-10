@@ -43,8 +43,8 @@ mqttActuator('zigbee2mqtt/light/livingroom_desk/set', () => {
     transition: settings.transition.short,
     brightness: 200 * site.flat.livingroom.brightness,
     color: site.flat.livingroom.productive
-      ? settings.colors.productive
-      : settings.colors.accent,
+      ? site.settings.colors.productive
+      : site.settings.colors.accent,
   }
 });
 
@@ -61,7 +61,7 @@ mqttActuator('zigbee2mqtt/light/livingroom_couch/set', () => {
     transition: settings.transition.short,
     brightness: site.flat.livingroom.productive ? 150 : 230 * site.flat.livingroom.brightness,
     color: site.flat.livingroom.productive
-      ? settings.colors.productive
-      : settings.colors.accent,
+      ? site.settings.colors.productive
+      : site.settings.colors.accent,
   }
 });

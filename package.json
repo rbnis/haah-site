@@ -7,13 +7,17 @@
   },
   "license": "AGPL-3.0-only",
   "dependencies": {
-    "@types/node": "^16.4.3",
-    "@types/react": "^17.0.15",
     "antd": "^4.16.8",
     "date-fns": "^2.23.0",
     "haah": "file:../haah",
     "react": "^17.0.2",
+    "react-color": "^2.19.3",
     "ts-node": "^10.1.0",
     "typescript": "^4.3.5"
+  },
+  "devDependencies": {
+    "@types/node": "^16.4.3",
+    "@types/react": "^17.0.15",
+    "@types/react-color": "^3.0.6"
   }
 }

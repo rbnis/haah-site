@@ -32,7 +32,7 @@ function bedroomCeilingLight() {
         state: 'on',
         transition: settings.transition.short,
         brightness: 255 * site.flat.bedroom.brightness,
-        color: settings.colors.uhlala,
+        color: site.settings.colors.uhlala,
       }
     }
 
