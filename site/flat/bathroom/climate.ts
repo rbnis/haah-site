@@ -33,7 +33,7 @@ mqttSensor('zigbee2mqtt/contact/bathroom_window', (payload) => {
 });
 
 mqttActuator('zigbee2mqtt/climate/bathroom/set', () => {
-  if (site.flat.bathroom.windows.window.state === windowState.closed && site.environment.daytime) {
+  if (site.flat.bathroom.windows.window.state === windowState.closed) {
     return {
       occupied_heating_setpoint: site.flat.bathroom.climate.temperatureThermostat
         + (site.flat.bathroom.climate.temperatureTarget

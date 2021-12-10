@@ -38,7 +38,7 @@ mqttSensor('zigbee2mqtt/contact/livingroom_balcony_door', (payload) => {
 });
 
 mqttActuator('zigbee2mqtt/climate/livingroom/set', () => {
-  if (site.flat.livingroom.windows.balcony.state === windowState.closed && site.environment.daytime) {
+  if (site.flat.livingroom.windows.balcony.state === windowState.closed) {
     return {
       current_heating_setpoint: site.flat.livingroom.climate.temperatureThermostat
         + (site.flat.livingroom.climate.temperatureTarget
