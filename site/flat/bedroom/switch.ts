@@ -116,7 +116,7 @@ function bedroomBedSwitch(payload: any) {
 
           state.flat.bedroom.lightOn = true;
         }
-        state.flat.bedroom.color = true;
+        state.flat.bedroom.color = false;
     });
   }
 
