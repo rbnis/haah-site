@@ -294,3 +294,30 @@ webuiWidget('Kitchen', () => {
   )
 });
 
+webuiWidget('Debug', () => {
+  return (
+    <>
+      <Label
+        label={"daylight"}
+        value={site.environment.daylight ? "true" : "false"}
+      />
+      <Label
+        label={"Hallway"}
+        value={site.flat.hallway.lights.ceiling.state === lightState.on ? "lightState.on" : site.flat.hallway.lights.ceiling.state === lightState.off ? "lightState.off" : "lightState.inherit"}
+      />
+      <Label
+        label={"occupancy"}
+        value={site.flat.hallway.occupancy.state === occupancyState.occupied ? "occupied" : "unoccupied"}
+      />
+      <Label
+        label={"Kitchen"}
+        value={site.flat.kitchen.lights.ceiling.state === lightState.on ? "lightState.on" : site.flat.kitchen.lights.ceiling.state === lightState.off ? "lightState.off" : "lightState.inherit"}
+      />
+      <Label
+        label={"occupancy"}
+        value={site.flat.kitchen.occupancy.state === occupancyState.occupied ? "occupied" : "unoccupied"}
+      />
+    </>
+  )
+});
+
